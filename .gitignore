@@ -1,0 +1,11 @@
+# project dependencies folder
+node_modules/*
+
+# configuration file
+.env
+
+# Project build
+build/
+
+# Editors
+.DS_Store
