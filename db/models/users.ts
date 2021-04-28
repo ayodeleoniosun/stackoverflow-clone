@@ -3,7 +3,7 @@ import Sequelize from "sequelize";
 import { sequelize } from "./instance";
 import * as bcrypt from "bcrypt";
 
-export interface UserAddModel {
+export interface UserRegisterModel {
   id: number;
   display_name: string;
   first_name: string;
@@ -12,7 +12,13 @@ export interface UserAddModel {
   password: string;
 }
 
-export interface UserModel extends Sequelize.Model<UserModel, UserAddModel> {
+export interface UserLoginModel {
+  email: string;
+  password: string;
+}
+
+export interface UserModel
+  extends Sequelize.Model<UserModel, UserRegisterModel> {
   id: number;
   display_name: string;
   first_name: string;
@@ -21,7 +27,7 @@ export interface UserModel extends Sequelize.Model<UserModel, UserAddModel> {
   password: string;
 }
 
-export const UserAttributes: string[] = [
+export const UserAttributes: any = [
   "id",
   "display_name",
   "first_name",
@@ -29,7 +35,7 @@ export const UserAttributes: string[] = [
   "email",
 ];
 
-export const User = sequelize.define<UserModel, UserAddModel>("users", {
+export const User = sequelize.define<UserModel, UserRegisterModel>("users", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,

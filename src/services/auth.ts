@@ -1,12 +1,19 @@
-import { User, UserAddModel, UserAttributes } from "../../db/models/users";
+import {
+  User,
+  UserRegisterModel,
+  UserLoginModel,
+  UserAttributes,
+} from "../../db/models/users";
 import customErrorCodes from "../constants/customErrorCodes";
 import { CustomError } from "../helpers/errors";
+import { generateJWTToken } from "../helpers/tools";
+import bcrypt from "bcrypt";
 
 require("dotenv").config();
 
 export class AuthService {
-  async register(credentials: UserAddModel) {
-    const { display_name, email } = credentials;
+  async register(payload: UserRegisterModel) {
+    const { display_name, email } = payload;
 
     const display_name_exists = await this.getUser({
       display_name: display_name,
@@ -16,21 +23,45 @@ export class AuthService {
 
     if (display_name_exists)
       throw new CustomError(
-        customErrorCodes.RESOURCE_ALREADY_EXIST,
-        "Display name already exists"
+        "Display name already exists",
+        customErrorCodes.RESOURCE_ALREADY_EXIST
       );
     else if (email_exists)
       throw new CustomError(
-        customErrorCodes.RESOURCE_ALREADY_EXIST,
-        "Email address already exists"
+        "Email address already exists",
+        customErrorCodes.RESOURCE_ALREADY_EXIST
       );
 
-    return User.create(credentials).then((user) =>
-      this.getUser({ id: user.id })
-    );
+    return User.create(payload).then((user) => this.getUser({ id: user.id }));
   }
 
-  async getUser(column: object) {
+  async login(payload: UserLoginModel) {
+    const { email, password } = payload;
+    const user = await this.getUser({ email: email }, true);
+
+    if (!user)
+      throw new CustomError(
+        "Email does not exist. Kindly register",
+        customErrorCodes.RESOURCE_NOT_FOUND
+      );
+    else
+      return bcrypt.compare(password, user.password).then(async (response) => {
+        if (response)
+          return {
+            token: generateJWTToken(user.toJSON()),
+            user: user,
+          };
+        else
+          throw new CustomError(
+            "Incorrect login credentials.",
+            customErrorCodes.PERMISSION_DENIED_TO_RESOURCE
+          );
+      });
+  }
+
+  async getUser(column: object, password: boolean = false) {
+    if (password) UserAttributes.push("password");
+
     return await User.findOne({
       attributes: UserAttributes,
       where: column,

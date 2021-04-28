@@ -28,6 +28,33 @@ const authController = {
         });
       });
   },
+
+  login: (req, res) => {
+    Promise.try(() => authService.login(req.body))
+      .then((data) => {
+        res.status(statusCodes.OK).send({
+          data: data,
+          message: "Login successful",
+          success: true,
+        });
+      })
+      .catch((err) => {
+        let statusCode: number;
+
+        if (err.type == "RESOURCE_NOT_FOUND") {
+          statusCode = statusCodes.NOT_FOUND;
+        } else if (err.type == "PERMISSION_DENIED_TO_RESOURCE") {
+          statusCode = statusCodes.FORBIDDEN;
+        } else {
+          statusCode = statusCodes.BAD_REQUEST;
+        }
+
+        res.status(statusCode).send({
+          message: err.message,
+          success: false,
+        });
+      });
+  },
 };
 
 export default authController;
