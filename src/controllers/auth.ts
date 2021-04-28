@@ -8,15 +8,21 @@ const authController = {
   register: (req, res) => {
     Promise.try(() => authService.register(req.body))
       .then((data) => {
-        res.status(statusCodes.OK).send({
+        res.status(statusCodes.CREATED).send({
           data: data,
           message: "Registration successful",
           success: true,
         });
       })
       .catch((err) => {
-        console.log(err);
-        res.status(statusCodes.BAD_REQUEST).send({
+        let statusCode: number;
+
+        statusCode =
+          err.type == "RESOURCE_ALREADY_EXIST"
+            ? statusCodes.UNPROCESSABLE_ENTITY
+            : statusCodes.BAD_REQUEST;
+
+        res.status(statusCode).send({
           message: err.message,
           success: false,
         });
