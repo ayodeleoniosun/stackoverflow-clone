@@ -1,6 +1,7 @@
 "use strict";
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "./instance";
+import { User } from "./user";
 
 export class Question extends Model {
   public id!: number;
@@ -22,10 +23,10 @@ export interface PostQuestionModel {
 
 export const QuestionAttributes: any = [
   "id",
-  "user_id",
   "title",
   "description",
   "tags",
+  "subscribe",
 ];
 
 Question.init(
@@ -62,3 +63,9 @@ Question.init(
     modelName: "Question",
   }
 );
+
+Question.belongsTo(User, {
+  foreignKey: "user_id",
+  as: "user",
+  onDelete: "CASCADE",
+});

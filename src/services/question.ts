@@ -1,3 +1,4 @@
+import { User } from "../../db/models/user";
 import {
   Question,
   PostQuestionModel,
@@ -9,8 +10,23 @@ import { CustomError } from "../helpers/errors";
 
 export class QuestionService {
   currentUser: any;
+  include: any;
+
   constructor(currentUser?: any) {
     this.currentUser = currentUser;
+    this.include = [{ model: User, as: "user" }];
+  }
+
+  async index({ limit, offset, ...rest }) {
+    const query = { ...rest };
+    return await Question.findAndCountAll({
+      where: query,
+      attributes: QuestionAttributes,
+      include: this.include,
+      order: [["updatedAt", "DESC"]],
+      limit,
+      offset,
+    });
   }
 
   async post(payload: PostQuestionModel) {
@@ -42,6 +58,7 @@ export class QuestionService {
   async getQuestion(column: object) {
     return await Question.findOne({
       attributes: QuestionAttributes,
+      include: this.include,
       where: column,
     });
   }
