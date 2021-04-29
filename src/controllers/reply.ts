@@ -20,6 +20,34 @@ const replyController = {
         });
       });
   },
+
+  rate: (req, res) => {
+    const replyService = new ReplyService(req.decoded);
+    Promise.try(() => replyService.rate(req.params.id, req.body))
+      .then((data: any) => {
+        res.status(statusCodes.CREATED).send({
+          data: data.rating,
+          message: `Reply ${data.type}`,
+          success: true,
+        });
+      })
+      .catch((err) => {
+        let statusCode: number;
+
+        if (err.type == "RESOURCE_NOT_FOUND") {
+          statusCode = statusCodes.NOT_FOUND;
+        } else if (err.type == "RESOURCE_ALREADY_EXIST") {
+          statusCode = statusCodes.UNPROCESSABLE_ENTITY;
+        } else {
+          statusCode = statusCodes.BAD_REQUEST;
+        }
+
+        res.status(statusCode).send({
+          message: err.message,
+          success: false,
+        });
+      });
+  },
 };
 
 export default replyController;

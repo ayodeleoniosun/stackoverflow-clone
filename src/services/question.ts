@@ -38,16 +38,9 @@ export class QuestionService {
   async post(payload: PostQuestionModel) {
     const { title, description, tags } = payload;
 
-    let payloadObject: PostQuestionModel = {
+    const question = await this.getQuestion({
       user_id: this.currentUser.id,
       title: title,
-      description: description,
-      tags: tags,
-    };
-
-    const question = await this.getQuestion({
-      user_id: payloadObject.user_id,
-      title: payloadObject.title,
     });
 
     if (question)
@@ -55,6 +48,13 @@ export class QuestionService {
         "You have posted this question before",
         customErrorCodes.RESOURCE_ALREADY_EXIST
       );
+
+    let payloadObject: PostQuestionModel = {
+      user_id: this.currentUser.id,
+      title,
+      description,
+      tags,
+    };
 
     return Question.create(payloadObject).then((question) =>
       this.getQuestion({ id: question.id })
@@ -76,8 +76,8 @@ export class QuestionService {
 
     const reply_exists = await this.getReply({
       user_id: this.currentUser.id,
-      question_id: question_id,
-      reply: reply,
+      question_id,
+      reply,
     });
 
     if (reply_exists)
@@ -88,7 +88,7 @@ export class QuestionService {
 
     let payloadObject: PostReplyModel = {
       user_id: this.currentUser.id,
-      question_id: question_id,
+      question_id,
       reply,
     };
 

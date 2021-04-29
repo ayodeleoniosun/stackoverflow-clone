@@ -14,10 +14,15 @@ export class Rating extends Model {
   public readonly updatedAt!: Date;
 }
 
-export interface PostRatingModel {
+export enum RatingType {
+  UP_VOTE = "up_vote",
+  DOWN_VOTE = "down_vote",
+}
+
+export interface RateModel {
   user_id: number;
   reply_id: number;
-  rating: string;
+  rating: RatingType;
 }
 
 export const RatingAttributes: any = ["id", "rating", "createdAt", "updatedAt"];
