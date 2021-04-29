@@ -12,7 +12,7 @@ module.exports = {
 
       question_id: {
         type: Sequelize.BIGINT(11),
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "Questions",
           key: "id",
@@ -22,7 +22,7 @@ module.exports = {
 
       reply_id: {
         type: Sequelize.BIGINT(11),
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "Replies",
           key: "id",
@@ -68,11 +68,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+    await queryInterface.dropTable("rating");
   },
 };

@@ -27,6 +27,8 @@ export const QuestionAttributes: any = [
   "description",
   "tags",
   "subscribe",
+  "createdAt",
+  "updatedAt",
 ];
 
 Question.init(

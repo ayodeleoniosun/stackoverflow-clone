@@ -3,14 +3,13 @@ import {
   UserRegisterModel,
   UserLoginModel,
   UserAttributes,
-} from "../../db/models/users";
+} from "../../db/models/user";
 import customErrorCodes from "../constants/customErrorCodes";
 import { CustomError } from "../helpers/errors";
 import { generateJWTToken } from "../helpers/tools";
 import bcrypt from "bcrypt";
 
 require("dotenv").config();
-
 export class AuthService {
   async register(payload: UserRegisterModel) {
     const { display_name, email } = payload;
