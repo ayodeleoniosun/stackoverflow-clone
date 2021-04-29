@@ -10,16 +10,6 @@ module.exports = {
         autoIncrement: true,
       },
 
-      question_id: {
-        type: Sequelize.BIGINT(11),
-        allowNull: true,
-        references: {
-          model: "Questions",
-          key: "id",
-          as: "question_id",
-        },
-      },
-
       reply_id: {
         type: Sequelize.BIGINT(11),
         allowNull: true,
@@ -40,18 +30,8 @@ module.exports = {
         },
       },
 
-      status: {
-        type: Sequelize.ENUM("question", "reply"),
-        allowNull: false,
-      },
-
-      type: {
-        type: Sequelize.ENUM("up_vote", "down_vote"),
-        allowNull: false,
-      },
-
       rating: {
-        type: Sequelize.ENUM("0", "1"),
+        type: Sequelize.ENUM("up_vote", "down_vote"),
         allowNull: false,
       },
 
@@ -67,7 +47,7 @@ module.exports = {
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     await queryInterface.dropTable("rating");
   },
 };
