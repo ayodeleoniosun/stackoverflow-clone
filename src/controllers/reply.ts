@@ -21,6 +21,22 @@ const replyController = {
       });
   },
 
+  rating: (req, res) => {
+    Promise.try(() => replyService.rating(req.params.id))
+      .then((data) => {
+        res.status(statusCodes.OK).send({
+          data: data,
+          success: true,
+        });
+      })
+      .catch((err) => {
+        res.status(statusCodes.BAD_REQUEST).send({
+          message: err.message,
+          success: false,
+        });
+      });
+  },
+
   rate: (req, res) => {
     const replyService = new ReplyService(req.decoded);
     Promise.try(() => replyService.rate(req.params.id, req.body))

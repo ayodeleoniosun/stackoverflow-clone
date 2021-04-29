@@ -6,6 +6,8 @@ const replyRouter = express.Router();
 
 replyRouter.route("/:id").get(replyController.show);
 
+replyRouter.route("/:id/rating").get(replyController.rating);
+
 replyRouter
   .route("/:id/rate")
   .post(permissions.isAuthenticated, replyController.rate);

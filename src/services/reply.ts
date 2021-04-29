@@ -34,6 +34,23 @@ export class ReplyService {
     return await this.getReply({ id: replyId });
   }
 
+  async rating(replyId: number) {
+    const upVotes = await this.countRating({
+      reply_id: replyId,
+      rating: RatingType.UP_VOTE,
+    });
+
+    const downVotes = await this.countRating({
+      reply_id: replyId,
+      rating: RatingType.DOWN_VOTE,
+    });
+
+    return {
+      up_votes: upVotes,
+      down_votes: downVotes,
+    };
+  }
+
   async rate(replyId: number, payload: RateModel) {
     const { rating } = payload;
     const isValidRating =
@@ -91,6 +108,12 @@ export class ReplyService {
     return await Rating.findOne({
       attributes: RatingAttributes,
       include: this.ratingInclude,
+      where: column,
+    });
+  }
+
+  async countRating(column: object) {
+    return await Rating.count({
       where: column,
     });
   }
