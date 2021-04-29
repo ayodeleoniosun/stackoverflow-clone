@@ -7,14 +7,20 @@ import {
 
 import customErrorCodes from "../constants/customErrorCodes";
 import { CustomError } from "../helpers/errors";
+import { Reply, PostReplyModel, ReplyAttributes } from "../../db/models/reply";
 
 export class QuestionService {
   currentUser: any;
-  include: any;
+  questionInclude: any;
+  replyInclude: any;
 
   constructor(currentUser?: any) {
     this.currentUser = currentUser;
-    this.include = [{ model: User, as: "user" }];
+    this.questionInclude = [{ model: User, as: "user" }];
+    this.replyInclude = [
+      { model: Question, as: "question" },
+      { model: User, as: "user" },
+    ];
   }
 
   async index({ limit, offset, ...rest }) {
@@ -22,7 +28,7 @@ export class QuestionService {
     return await Question.findAndCountAll({
       where: query,
       attributes: QuestionAttributes,
-      include: this.include,
+      include: this.questionInclude,
       order: [["updatedAt", "DESC"]],
       limit,
       offset,
@@ -55,10 +61,54 @@ export class QuestionService {
     );
   }
 
+  async reply(question_id: number, payload: PostReplyModel) {
+    const { reply } = payload;
+
+    const question = await this.getQuestion({
+      id: question_id,
+    });
+
+    if (!question)
+      throw new CustomError(
+        "Question does not exist",
+        customErrorCodes.RESOURCE_ALREADY_EXIST
+      );
+
+    const reply_exists = await this.getReply({
+      user_id: this.currentUser.id,
+      question_id: question_id,
+      reply: reply,
+    });
+
+    if (reply_exists)
+      throw new CustomError(
+        "You have posted this reply to this question before",
+        customErrorCodes.RESOURCE_ALREADY_EXIST
+      );
+
+    let payloadObject: PostReplyModel = {
+      user_id: this.currentUser.id,
+      question_id: question_id,
+      reply,
+    };
+
+    return Reply.create(payloadObject).then((reply) =>
+      this.getReply({ id: reply.id })
+    );
+  }
+
   async getQuestion(column: object) {
     return await Question.findOne({
       attributes: QuestionAttributes,
-      include: this.include,
+      include: this.questionInclude,
+      where: column,
+    });
+  }
+
+  async getReply(column: object) {
+    return await Reply.findOne({
+      attributes: ReplyAttributes,
+      include: this.replyInclude,
       where: column,
     });
   }

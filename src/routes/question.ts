@@ -10,4 +10,8 @@ questionRouter
   .route("/")
   .post(permissions.isAuthenticated, questionController.post);
 
+questionRouter
+  .route("/:id/reply")
+  .post(permissions.isAuthenticated, questionController.reply);
+
 export default questionRouter;
