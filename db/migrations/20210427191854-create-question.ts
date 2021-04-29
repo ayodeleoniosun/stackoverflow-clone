@@ -32,7 +32,7 @@ module.exports = {
 
       tags: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
 
       subscribe: {

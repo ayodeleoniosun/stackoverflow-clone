@@ -7,7 +7,7 @@ const authService = new AuthService();
 const authController = {
   register: (req, res) => {
     Promise.try(() => authService.register(req.body))
-      .then((data) => {
+      .then((data: object) => {
         res.status(statusCodes.CREATED).send({
           data: data,
           message: "Registration successful",
@@ -31,7 +31,7 @@ const authController = {
 
   login: (req, res) => {
     Promise.try(() => authService.login(req.body))
-      .then((data) => {
+      .then((data: object) => {
         res.status(statusCodes.OK).send({
           data: data,
           message: "Login successful",
