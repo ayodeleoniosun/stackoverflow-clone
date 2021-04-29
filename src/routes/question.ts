@@ -12,6 +12,10 @@ questionRouter
 
 questionRouter
   .route("/:id/reply")
+  .get(permissions.isAuthenticated, questionController.replies);
+
+questionRouter
+  .route("/:id/reply")
   .post(permissions.isAuthenticated, questionController.reply);
 
 export default questionRouter;

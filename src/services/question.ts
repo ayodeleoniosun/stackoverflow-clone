@@ -97,6 +97,18 @@ export class QuestionService {
     );
   }
 
+  async replies(question_id, { limit, offset, ...rest }) {
+    const query = { question_id: question_id, ...rest };
+    return await Reply.findAndCountAll({
+      where: query,
+      attributes: ReplyAttributes,
+      include: this.replyInclude,
+      order: [["updatedAt", "DESC"]],
+      limit,
+      offset,
+    });
+  }
+
   async getQuestion(column: object) {
     return await Question.findOne({
       attributes: QuestionAttributes,
