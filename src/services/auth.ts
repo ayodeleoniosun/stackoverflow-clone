@@ -14,18 +14,18 @@ export class AuthService {
   async register(payload: UserRegisterModel) {
     const { display_name, email } = payload;
 
-    const display_name_exists = await this.getUser({
+    const displayNameExists = await this.getUser({
       display_name: display_name,
     });
 
-    const email_exists = await this.getUser({ email: email });
+    const emailExists = await this.getUser({ email: email });
 
-    if (display_name_exists)
+    if (displayNameExists)
       throw new CustomError(
         "Display name already exists",
         customErrorCodes.RESOURCE_ALREADY_EXIST
       );
-    else if (email_exists)
+    else if (emailExists)
       throw new CustomError(
         "Email address already exists",
         customErrorCodes.RESOURCE_ALREADY_EXIST

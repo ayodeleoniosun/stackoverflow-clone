@@ -61,11 +61,11 @@ export class QuestionService {
     );
   }
 
-  async reply(question_id: number, payload: PostReplyModel) {
+  async reply(questionId: number, payload: PostReplyModel) {
     const { reply } = payload;
 
     const question = await this.getQuestion({
-      id: question_id,
+      id: questionId,
     });
 
     if (!question)
@@ -74,13 +74,13 @@ export class QuestionService {
         customErrorCodes.RESOURCE_ALREADY_EXIST
       );
 
-    const reply_exists = await this.getReply({
+    const replyExists = await this.getReply({
       user_id: this.currentUser.id,
-      question_id,
+      question_id: questionId,
       reply,
     });
 
-    if (reply_exists)
+    if (replyExists)
       throw new CustomError(
         "You have posted this reply to this question before",
         customErrorCodes.RESOURCE_ALREADY_EXIST
@@ -88,7 +88,7 @@ export class QuestionService {
 
     let payloadObject: PostReplyModel = {
       user_id: this.currentUser.id,
-      question_id,
+      question_id: questionId,
       reply,
     };
 
@@ -97,8 +97,8 @@ export class QuestionService {
     );
   }
 
-  async replies(question_id, { limit, offset, ...rest }) {
-    const query = { question_id: question_id, ...rest };
+  async replies(questionId, { limit, offset, ...rest }) {
+    const query = { question_id: questionId, ...rest };
     return await Reply.findAndCountAll({
       where: query,
       attributes: ReplyAttributes,

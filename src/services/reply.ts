@@ -30,11 +30,11 @@ export class ReplyService {
     ];
   }
 
-  async show(reply_id: number) {
-    return await this.getReply({ id: reply_id });
+  async show(replyId: number) {
+    return await this.getReply({ id: replyId });
   }
 
-  async rate(reply_id: number, payload: RateModel) {
+  async rate(replyId: number, payload: RateModel) {
     const { rating } = payload;
     const isValidRating =
       rating == RatingType.UP_VOTE || rating == RatingType.DOWN_VOTE;
@@ -45,7 +45,7 @@ export class ReplyService {
         customErrorCodes.RESOURCE_NOT_FOUND
       );
 
-    const reply = await this.getReply({ id: reply_id });
+    const reply = await this.getReply({ id: replyId });
 
     if (!reply)
       throw new CustomError(
@@ -55,13 +55,13 @@ export class ReplyService {
 
     this.ratingType = rating === RatingType.UP_VOTE ? "up voted" : "down_voted";
 
-    const rating_exists = await this.getRating({
-      reply_id: reply_id,
+    const ratingExists = await this.getRating({
+      reply_id: replyId,
       user_id: this.currentUser.id,
       rating: rating,
     });
 
-    if (rating_exists)
+    if (ratingExists)
       throw new CustomError(
         `You have already ${this.ratingType} this reply`,
         customErrorCodes.RESOURCE_ALREADY_EXIST
@@ -69,7 +69,7 @@ export class ReplyService {
 
     let payloadObject: RateModel = {
       user_id: this.currentUser.id,
-      reply_id,
+      reply_id: replyId,
       rating,
     };
 
