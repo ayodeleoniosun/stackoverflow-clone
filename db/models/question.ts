@@ -54,6 +54,12 @@ Question.init(
       allowNull: false,
     },
 
+    subscribe: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
+
     tags: {
       type: DataTypes.STRING,
       allowNull: true,

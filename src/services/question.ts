@@ -97,15 +97,17 @@ export class QuestionService {
     let post: any = question;
 
     return Reply.create(payloadObject).then(async (reply) => {
-      const fullname = capitalizeWord(
-        `${post.user.first_name} ${post.user.last_name}`
-      );
-      sendMail(
-        post.user.email,
-        "New comment",
-        fullname,
-        capitalizeFirstLetter(post.title)
-      );
+      if (post.subscribe) {
+        const fullname = capitalizeWord(
+          `${post.user.first_name} ${post.user.last_name}`
+        );
+        sendMail(
+          post.user.email,
+          "New comment",
+          fullname,
+          capitalizeFirstLetter(post.title)
+        );
+      }
 
       return await this.getReply({ id: reply.id });
     });
