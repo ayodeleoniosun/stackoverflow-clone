@@ -7,6 +7,8 @@ import {
 
 import customErrorCodes from "../constants/customErrorCodes";
 import { CustomError } from "../helpers/errors";
+import { capitalizeWord, capitalizeFirstLetter } from "../helpers/tools";
+import { sendMail } from "../helpers/email";
 import { Reply, PostReplyModel, ReplyAttributes } from "../../db/models/reply";
 
 export class QuestionService {
@@ -92,9 +94,21 @@ export class QuestionService {
       reply,
     };
 
-    return Reply.create(payloadObject).then((reply) =>
-      this.getReply({ id: reply.id })
-    );
+    let post: any = question;
+
+    return Reply.create(payloadObject).then(async (reply) => {
+      const fullname = capitalizeWord(
+        `${post.user.first_name} ${post.user.last_name}`
+      );
+      sendMail(
+        post.user.email,
+        "New comment",
+        fullname,
+        capitalizeFirstLetter(post.title)
+      );
+
+      return await this.getReply({ id: reply.id });
+    });
   }
 
   async replies(questionId, { limit, offset, ...rest }) {
