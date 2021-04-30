@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("replies", {
+    await queryInterface.createTable("ratings", {
       id: {
         type: Sequelize.BIGINT(11),
         allowNull: false,
@@ -10,13 +10,13 @@ module.exports = {
         autoIncrement: true,
       },
 
-      question_id: {
+      reply_id: {
         type: Sequelize.BIGINT(11),
-        allowNull: false,
+        allowNull: true,
         references: {
-          model: "Questions",
+          model: "Replies",
           key: "id",
-          as: "question_id",
+          as: "reply_id",
         },
       },
 
@@ -30,17 +30,17 @@ module.exports = {
         },
       },
 
-      reply: {
-        type: Sequelize.TEXT,
+      rating: {
+        type: Sequelize.ENUM("up_vote", "down_vote"),
         allowNull: false,
       },
 
-      created_at: {
+      createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },
 
-      updated_at: {
+      updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },
@@ -48,6 +48,6 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable("replies");
+    await queryInterface.dropTable("ratings");
   },
 };

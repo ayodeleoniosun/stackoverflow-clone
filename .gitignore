@@ -9,3 +9,4 @@ build/
 
 # Editors
 .DS_Store
+dist

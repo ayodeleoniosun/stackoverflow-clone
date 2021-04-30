@@ -4,6 +4,5 @@ module.exports = {
   "env" : "development",
   "config": path.resolve('./db/config', 'config.ts'),
   "models-path": path.resolve('./db/models'),
-  "seeders-path": path.resolve('./db/seeders'),
   "migrations-path": path.resolve('./db/migrations')
 }
