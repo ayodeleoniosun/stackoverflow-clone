@@ -2,7 +2,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "./instance";
 import * as bcrypt from "bcrypt";
-
 export class User extends Model {
   public id!: number;
   public display_name!: string;
@@ -35,6 +34,8 @@ export const UserAttributes: any = [
   "first_name",
   "last_name",
   "email",
+  "createdAt",
+  "updatedAt",
 ];
 
 User.init(

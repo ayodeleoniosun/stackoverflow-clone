@@ -3,7 +3,6 @@ import { Model, DataTypes } from "sequelize";
 import { sequelize } from "./instance";
 import { Reply } from "./reply";
 import { User } from "./user";
-
 export class Rating extends Model {
   public id!: number;
   public reply_id!: number;
@@ -57,10 +56,20 @@ Rating.init(
   }
 );
 
+Reply.hasMany(Rating, {
+  foreignKey: "reply_id",
+  as: "rating",
+});
+
 Rating.belongsTo(Reply, {
   foreignKey: "reply_id",
   as: "reply",
   onDelete: "CASCADE",
+});
+
+User.hasMany(Rating, {
+  foreignKey: "user_id",
+  as: "rating",
 });
 
 Rating.belongsTo(User, {

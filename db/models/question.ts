@@ -2,7 +2,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "./instance";
 import { User } from "./user";
-
 export class Question extends Model {
   public id!: number;
   public user_id!: number;
@@ -65,6 +64,11 @@ Question.init(
     modelName: "Question",
   }
 );
+
+User.hasMany(Question, {
+  foreignKey: "user_id",
+  as: "question",
+});
 
 Question.belongsTo(User, {
   foreignKey: "user_id",
