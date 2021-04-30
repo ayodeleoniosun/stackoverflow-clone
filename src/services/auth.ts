@@ -43,19 +43,19 @@ export class AuthService {
         "Email does not exist. Kindly register",
         customErrorCodes.RESOURCE_NOT_FOUND
       );
-    else
-      return bcrypt.compare(password, user.password).then(async (response) => {
-        if (response)
-          return {
-            token: generateJWTToken(user.toJSON()),
-            user: user,
-          };
-        else
-          throw new CustomError(
-            "Incorrect login credentials.",
-            customErrorCodes.PERMISSION_DENIED_TO_RESOURCE
-          );
-      });
+
+    return bcrypt.compare(password, user.password).then(async (response) => {
+      if (response)
+        return {
+          token: generateJWTToken(user.toJSON()),
+          user: user,
+        };
+
+      throw new CustomError(
+        "Incorrect login credentials.",
+        customErrorCodes.PERMISSION_DENIED_TO_RESOURCE
+      );
+    });
   }
 
   async getUser(column: object, password: boolean = false) {
