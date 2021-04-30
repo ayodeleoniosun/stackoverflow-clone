@@ -1,12 +1,12 @@
-import { User } from "../../db/models/user";
-import { Reply, ReplyAttributes } from "../../db/models/reply";
+import { User } from "../db/models/user";
+import { Reply, ReplyAttributes } from "../db/models/reply";
 import {
   RateModel,
   Rating,
   RatingAttributes,
   RatingType,
-} from "../../db/models/rating";
-import { Question } from "../../db/models/question";
+} from "../db/models/rating";
+import { Question } from "../db/models/question";
 import customErrorCodes from "../constants/customErrorCodes";
 import { CustomError } from "../helpers/errors";
 
@@ -90,10 +90,12 @@ export class ReplyService {
       rating,
     };
 
-    return Rating.create(payloadObject).then(async (response) => ({
+    const response = await Rating.create(payloadObject);
+
+    return {
       rating: await this.getRating({ id: response.id }),
       type: this.ratingType,
-    }));
+    };
   }
 
   async getReply(column: object) {

@@ -1,15 +1,15 @@
-import { User } from "../../db/models/user";
+import { User } from "../db/models/user";
 import {
   Question,
   PostQuestionModel,
   QuestionAttributes,
-} from "../../db/models/question";
+} from "../db/models/question";
 
 import customErrorCodes from "../constants/customErrorCodes";
 import { CustomError } from "../helpers/errors";
 import { capitalizeWord, capitalizeFirstLetter } from "../helpers/tools";
 import { sendMail } from "../helpers/email";
-import { Reply, PostReplyModel, ReplyAttributes } from "../../db/models/reply";
+import { Reply, PostReplyModel, ReplyAttributes } from "../db/models/reply";
 
 export class QuestionService {
   currentUser: any;
@@ -58,9 +58,8 @@ export class QuestionService {
       tags,
     };
 
-    return Question.create(payloadObject).then((question) =>
-      this.getQuestion({ id: question.id })
-    );
+    const resource = await Question.create(payloadObject);
+    return await this.getQuestion({ id: resource.id });
   }
 
   async reply(questionId: number, payload: PostReplyModel) {
@@ -96,21 +95,21 @@ export class QuestionService {
 
     let post: any = question;
 
-    return Reply.create(payloadObject).then(async (reply) => {
-      if (post.subscribe) {
-        const fullname = capitalizeWord(
-          `${post.user.first_name} ${post.user.last_name}`
-        );
-        sendMail(
-          post.user.email,
-          "New comment",
-          fullname,
-          capitalizeFirstLetter(post.title)
-        );
-      }
+    const response = await Reply.create(payloadObject);
 
-      return await this.getReply({ id: reply.id });
-    });
+    if (post.subscribe) {
+      const fullname = capitalizeWord(
+        `${post.user.first_name} ${post.user.last_name}`
+      );
+      sendMail(
+        post.user.email,
+        "New comment",
+        fullname,
+        capitalizeFirstLetter(post.title)
+      );
+    }
+
+    return await this.getReply({ id: response.id });
   }
 
   async replies(questionId, { limit, offset, ...rest }) {
