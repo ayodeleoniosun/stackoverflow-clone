@@ -108,5 +108,4 @@ After starting the project in development mode, the API documentation is availab
 
 ## Feedbacks
 
-1. Sample error messages need to be supplied to avoid any form of typo.
-2. Sample content of the mail to be sent to the user who created the post when replies are made should be supplied.
+1. The task was well explanatory in terms of its requirements, technologies and tools to use.
