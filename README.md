@@ -35,6 +35,8 @@ These are the database relationships:
 4. A reply can have many ratings but a rating can only belong to a reply.
 5. A user can rate many replies.
 
+The Dbdiagram is available [here](https://dbdiagram.io/d/608b8657b29a09603d12c9c5).
+
 ## Documentation
 
 The API documentation is available [here](https://localhost:4000/api/docs/).
