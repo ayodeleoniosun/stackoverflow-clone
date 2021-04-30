@@ -3,7 +3,7 @@ import {
   UserRegisterModel,
   UserLoginModel,
   UserAttributes,
-} from "../../db/models/user";
+} from "../db/models/user";
 import customErrorCodes from "../constants/customErrorCodes";
 import { CustomError } from "../helpers/errors";
 import { generateJWTToken } from "../helpers/tools";

@@ -1,15 +1,15 @@
-import { User } from "../../db/models/user";
+import { User } from "../db/models/user";
 import {
   Question,
   PostQuestionModel,
   QuestionAttributes,
-} from "../../db/models/question";
+} from "../db/models/question";
 
 import customErrorCodes from "../constants/customErrorCodes";
 import { CustomError } from "../helpers/errors";
 import { capitalizeWord, capitalizeFirstLetter } from "../helpers/tools";
 import { sendMail } from "../helpers/email";
-import { Reply, PostReplyModel, ReplyAttributes } from "../../db/models/reply";
+import { Reply, PostReplyModel, ReplyAttributes } from "../db/models/reply";
 
 export class QuestionService {
   currentUser: any;

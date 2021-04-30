@@ -1,12 +1,12 @@
-import { User } from "../../db/models/user";
-import { Reply, ReplyAttributes } from "../../db/models/reply";
+import { User } from "../db/models/user";
+import { Reply, ReplyAttributes } from "../db/models/reply";
 import {
   RateModel,
   Rating,
   RatingAttributes,
   RatingType,
-} from "../../db/models/rating";
-import { Question } from "../../db/models/question";
+} from "../db/models/rating";
+import { Question } from "../db/models/question";
 import customErrorCodes from "../constants/customErrorCodes";
 import { CustomError } from "../helpers/errors";
 

@@ -1,6 +1,6 @@
 import { decodeJWTToken } from "../helpers/tools";
 import statusCodes from "../constants/statusCodes";
-import { User } from "../../db/models/user";
+import { User } from "../db/models/user";
 
 const permissions = {
   isAuthenticated: async (req, res, next) => {
