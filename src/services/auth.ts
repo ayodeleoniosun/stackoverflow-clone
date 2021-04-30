@@ -31,7 +31,8 @@ export class AuthService {
         customErrorCodes.RESOURCE_ALREADY_EXIST
       );
 
-    return User.create(payload).then((user) => this.getUser({ id: user.id }));
+    const user = await User.create(payload);
+    return await this.getUser({ id: user.id });
   }
 
   async login(payload: UserLoginModel) {
@@ -44,18 +45,18 @@ export class AuthService {
         customErrorCodes.RESOURCE_NOT_FOUND
       );
 
-    return bcrypt.compare(password, user.password).then(async (response) => {
-      if (response)
-        return {
-          token: generateJWTToken(user.toJSON()),
-          user: user,
-        };
+    const response = await bcrypt.compare(password, user.password);
 
-      throw new CustomError(
-        "Incorrect login credentials.",
-        customErrorCodes.PERMISSION_DENIED_TO_RESOURCE
-      );
-    });
+    if (response)
+      return {
+        token: generateJWTToken(user.toJSON()),
+        user: user,
+      };
+
+    throw new CustomError(
+      "Incorrect login credentials.",
+      customErrorCodes.PERMISSION_DENIED_TO_RESOURCE
+    );
   }
 
   async getUser(column: object, password: boolean = false) {

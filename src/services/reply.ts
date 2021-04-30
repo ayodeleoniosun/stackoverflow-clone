@@ -90,10 +90,12 @@ export class ReplyService {
       rating,
     };
 
-    return Rating.create(payloadObject).then(async (response) => ({
+    const response = await Rating.create(payloadObject);
+
+    return {
       rating: await this.getRating({ id: response.id }),
       type: this.ratingType,
-    }));
+    };
   }
 
   async getReply(column: object) {

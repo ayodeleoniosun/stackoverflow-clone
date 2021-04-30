@@ -58,9 +58,8 @@ export class QuestionService {
       tags,
     };
 
-    return Question.create(payloadObject).then((question) =>
-      this.getQuestion({ id: question.id })
-    );
+    const resource = await Question.create(payloadObject);
+    return await this.getQuestion({ id: resource.id });
   }
 
   async reply(questionId: number, payload: PostReplyModel) {
@@ -96,21 +95,21 @@ export class QuestionService {
 
     let post: any = question;
 
-    return Reply.create(payloadObject).then(async (reply) => {
-      if (post.subscribe) {
-        const fullname = capitalizeWord(
-          `${post.user.first_name} ${post.user.last_name}`
-        );
-        sendMail(
-          post.user.email,
-          "New comment",
-          fullname,
-          capitalizeFirstLetter(post.title)
-        );
-      }
+    const response = await Reply.create(payloadObject);
 
-      return await this.getReply({ id: reply.id });
-    });
+    if (post.subscribe) {
+      const fullname = capitalizeWord(
+        `${post.user.first_name} ${post.user.last_name}`
+      );
+      sendMail(
+        post.user.email,
+        "New comment",
+        fullname,
+        capitalizeFirstLetter(post.title)
+      );
+    }
+
+    return await this.getReply({ id: response.id });
   }
 
   async replies(questionId, { limit, offset, ...rest }) {
