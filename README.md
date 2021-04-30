@@ -24,8 +24,7 @@ As stated in the assessment test, the following modules were implemented:
 The following assumptions were made during the process of implementing this task:
 
 1. Valid email address is supplied by the user during the registration process, as I did not verify that.
-2. Questions are automatically subscribed to.
-3. You don't need to be logged before you can view all posted questions and their respective replies and ratings.
+2. You don't need to be logged before you can view all posted questions and their respective replies and ratings.
 
 These are the database relationships:
 
@@ -105,6 +104,8 @@ After starting the project in development mode, the API documentation is availab
 ## Requirements not covered
 
 1. I could not write the tests for the task.
+2. Other users could not subscribe to the question except the person that posted it.
+3. Only replies can be up voted or down voted.
 
 ## Feedbacks
 
