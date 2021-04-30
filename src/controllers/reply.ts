@@ -52,7 +52,10 @@ const replyController = {
 
         if (err.type == "RESOURCE_NOT_FOUND") {
           statusCode = statusCodes.NOT_FOUND;
-        } else if (err.type == "RESOURCE_ALREADY_EXIST") {
+        } else if (
+          err.type == "RESOURCE_ALREADY_EXIST" ||
+          err.type == "INVALID_RATING_TYPE"
+        ) {
           statusCode = statusCodes.UNPROCESSABLE_ENTITY;
         } else {
           statusCode = statusCodes.BAD_REQUEST;

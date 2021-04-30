@@ -59,7 +59,7 @@ export class ReplyService {
     if (!isValidRating)
       throw new CustomError(
         "Invalid rating type.",
-        customErrorCodes.RESOURCE_NOT_FOUND
+        customErrorCodes.INVALID_RATING_TYPE
       );
 
     const reply = await this.getReply({ id: replyId });
@@ -70,7 +70,7 @@ export class ReplyService {
         customErrorCodes.RESOURCE_NOT_FOUND
       );
 
-    this.ratingType = rating === RatingType.UP_VOTE ? "up voted" : "down_voted";
+    this.ratingType = rating === RatingType.UP_VOTE ? "up voted" : "down voted";
 
     const ratingExists = await this.getRating({
       reply_id: replyId,
