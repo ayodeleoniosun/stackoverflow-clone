@@ -2,7 +2,7 @@
 
 ## Description
 
-This repository implemented a simple clone of Stackoverflow using Node.js (Typescript), Express and Sequelize.
+This repository implements a simple clone of Stackoverflow using Node.js (Typescript), Express and Sequelize.
 As stated in the assessment test, the following modules were implemented:
 
 1. Authentication
