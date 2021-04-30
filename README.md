@@ -97,7 +97,7 @@ After starting the project in development mode, the API documentation is availab
    - Change `root` to your database username and `password` to your database password in DATABASE_URL variable
    - Update other DB\_ variables to your local database configuration details
    - Update other variables as needed
-6. Run database migrations - `npm run pre:start`
+6. Run database migrations - `npm run prestart`
 7. Create a production build - `npm run build`
 8. Start the server - `npm run start`
 
