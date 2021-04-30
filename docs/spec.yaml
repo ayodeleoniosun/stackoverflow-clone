@@ -78,7 +78,7 @@ paths:
   /api/question/{id}/reply:
     get:
       tags:
-        - Question replies
+        - Question
       summary: Fetch Questions Replies
       parameters:
         - name: id
@@ -117,6 +117,59 @@ paths:
       responses:
         "201":
           $ref: "#/components/responses/PostReply"
+
+  /api/reply/{id}:
+    get:
+      tags:
+        - Reply
+      summary: Fetch Reply Details
+      parameters:
+        - name: id
+          in: path
+          description: Reply ID
+          schema:
+            $ref: "#/components/schemas/Number"
+      responses:
+        "200":
+          $ref: "#/components/responses/FetchReply"
+
+  /api/reply/{id}/rating:
+    get:
+      tags:
+        - Reply
+      summary: Fetch Reply Rating
+      parameters:
+        - name: id
+          in: path
+          description: Reply ID
+          schema:
+            $ref: "#/components/schemas/Number"
+      responses:
+        "200":
+          $ref: "#/components/responses/FetchReplyRating"
+
+  /api/reply/{id}/rate:
+    post:
+      tags:
+        - Reply
+      summary: Rate reply
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Reply ID
+          schema:
+            $ref: "#/components/schemas/Number"
+      requestBody:
+        description: Rate payload
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RateReply"
+      responses:
+        "201":
+          $ref: "#/components/responses/RateReply"
 
 components:
   securitySchemes:
@@ -159,6 +212,27 @@ components:
         "application/json":
           schema:
             $ref: "#/components/schemas/PostReplyResponse"
+
+    RateReply:
+      description: Rate reply response
+      content:
+        "application/json":
+          schema:
+            $ref: "#/components/schemas/RateReplyResponse"
+
+    FetchReply:
+      description: Fetch reply response
+      content:
+        "application/json":
+          schema:
+            $ref: "#/components/schemas/FetchReplyResponse"
+
+    FetchReplyRating:
+      description: Fetch reply rating response
+      content:
+        "application/json":
+          schema:
+            $ref: "#/components/schemas/FetchReplyRatingResponse"
 
     FetchQuestionReplies:
       description: Fetch question replies response
@@ -235,6 +309,25 @@ components:
           type: string
           example: password
 
+    PostQuestion:
+      properties:
+        title:
+          $ref: "#/components/schemas/String"
+        description:
+          $ref: "#/components/schemas/String"
+        tags:
+          $ref: "#/components/schemas/String"
+
+    PostReply:
+      properties:
+        reply:
+          $ref: "#/components/schemas/String"
+
+    RateReply:
+      properties:
+        rating:
+          $ref: "#/components/schemas/RatingEnum"
+
     UserDetail:
       allOf:
         - $ref: "#/components/schemas/DefaultModelAttributes"
@@ -287,19 +380,24 @@ components:
             user:
               $ref: "#/components/schemas/UserDetail"
 
-    PostQuestion:
-      properties:
-        title:
-          $ref: "#/components/schemas/String"
-        description:
-          $ref: "#/components/schemas/String"
-        tags:
-          $ref: "#/components/schemas/String"
+    RateReplyDetail:
+      allOf:
+        - $ref: "#/components/schemas/DefaultModelAttributes"
+        - properties:
+            rating:
+              $ref: "#/components/schemas/String"
+            reply:
+              $ref: "#/components/schemas/ReplyDetail"
+            user:
+              $ref: "#/components/schemas/UserDetail"
 
-    PostReply:
-      properties:
-        reply:
-          $ref: "#/components/schemas/String"
+    ReplyRatingDetail:
+      allOf:
+        - properties:
+            up_votes:
+              $ref: "#/components/schemas/Number"
+            down_votes:
+              $ref: "#/components/schemas/Number"
 
     UserLoginResponse:
       properties:
@@ -355,6 +453,32 @@ components:
           $ref: "#/components/schemas/ReplyDetail"
         message:
           $ref: "#/components/schemas/String"
+        success:
+          $ref: "#/components/schemas/Boolean"
+
+    FetchReplyResponse:
+      properties:
+        data:
+          type: object
+          $ref: "#/components/schemas/ReplyDetail"
+        success:
+          $ref: "#/components/schemas/Boolean"
+
+    RateReplyResponse:
+      properties:
+        data:
+          type: object
+          $ref: "#/components/schemas/RateReplyDetail"
+        message:
+          $ref: "#/components/schemas/String"
+        success:
+          $ref: "#/components/schemas/Boolean"
+
+    FetchReplyRatingResponse:
+      properties:
+        data:
+          type: object
+          $ref: "#/components/schemas/ReplyRatingDetail"
         success:
           $ref: "#/components/schemas/Boolean"
 
