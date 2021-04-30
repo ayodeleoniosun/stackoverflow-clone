@@ -10,9 +10,7 @@ questionRouter
   .route("/")
   .post(permissions.isAuthenticated, questionController.post);
 
-questionRouter
-  .route("/:id/reply")
-  .get(permissions.isAuthenticated, questionController.replies);
+questionRouter.route("/:id/reply").get(questionController.replies);
 
 questionRouter
   .route("/:id/reply")

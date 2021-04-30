@@ -1,0 +1,374 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Mini stackoverflow clone
+  description: Documentation for mini stackoverflow clone
+
+tags:
+  - name: Auth
+    description: Authentication
+  - name: Question
+    description: Question
+  - name: Reply
+    description: Reply
+
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Create a new account
+      requestBody:
+        description: Registration payload
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRegistration"
+      responses:
+        "201":
+          $ref: "#/components/responses/UserRegistration"
+
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login as a user
+      requestBody:
+        description: Login payload
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLogin"
+      responses:
+        "200":
+          $ref: "#/components/responses/UserLogin"
+
+  /api/question:
+    get:
+      tags:
+        - Question
+      summary: Fetch Questions
+      parameters:
+        - name: page[size]
+          in: query
+          description: "Page size"
+        - name: page[number]
+          in: query
+          description: "Current page number"
+      responses:
+        "200":
+          $ref: "#/components/responses/FetchQuestion"
+
+    post:
+      tags:
+        - Question
+      summary: Post new question
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Question payload
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostQuestion"
+      responses:
+        "201":
+          $ref: "#/components/responses/PostQuestion"
+
+  /api/question/{id}/reply:
+    get:
+      tags:
+        - Question replies
+      summary: Fetch Questions Replies
+      parameters:
+        - name: id
+          in: path
+          description: Question ID
+          schema:
+            $ref: "#/components/schemas/Number"
+        - name: page[size]
+          in: query
+          description: "Page size"
+        - name: page[number]
+          in: query
+          description: "Current page number"
+      responses:
+        "200":
+          $ref: "#/components/responses/FetchQuestionReplies"
+
+    post:
+      tags:
+        - Question
+      summary: Post reply
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Question ID
+          schema:
+            $ref: "#/components/schemas/Number"
+      requestBody:
+        description: Reply payload
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostReply"
+      responses:
+        "201":
+          $ref: "#/components/responses/PostReply"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UserRegistration:
+      description: Registration response
+      content:
+        "application/json":
+          schema:
+            $ref: "#/components/schemas/UserRegistrationResponse"
+
+    UserLogin:
+      description: Login response
+      content:
+        "application/json":
+          schema:
+            $ref: "#/components/schemas/UserLoginResponse"
+
+    PostQuestion:
+      description: Post question response
+      content:
+        "application/json":
+          schema:
+            $ref: "#/components/schemas/PostQuestionResponse"
+
+    FetchQuestion:
+      description: Fetch question response
+      content:
+        "application/json":
+          schema:
+            $ref: "#/components/schemas/FetchQuestionResponse"
+
+    PostReply:
+      description: Post reply response
+      content:
+        "application/json":
+          schema:
+            $ref: "#/components/schemas/PostReplyResponse"
+
+    FetchQuestionReplies:
+      description: Fetch question replies response
+      content:
+        "application/json":
+          schema:
+            $ref: "#/components/schemas/FetchQuestionReplyResponse"
+
+  parameters:
+    page[size]:
+      name: page[size]
+      in: query
+      description: "Record limit to display per page"
+
+    page[number]:
+      name: page[number]
+      in: query
+      description: "Current page number"
+
+  schemas:
+    Number:
+      type: number
+      example: 1
+    Boolean:
+      type: boolean
+    Email:
+      type: string
+      format: email
+      example: user@example.com
+    String:
+      type: string
+    Object:
+      type: object
+    DateTime:
+      type: string
+      format: "date-time"
+    RatingEnum:
+      type: string
+      enum: [up_vote, down_vote]
+    DefaultModelAttributes:
+      properties:
+        id:
+          $ref: "#/components/schemas/Number"
+        createdAt:
+          $ref: "#/components/schemas/DateTime"
+        updatedAt:
+          $ref: "#/components/schemas/DateTime"
+    BaseResponseFields:
+      properties:
+        message:
+          $ref: "#/components/schemas/String"
+        success:
+          $ref: "#/components/schemas/Boolean"
+
+    UserRegistration:
+      properties:
+        display_name:
+          $ref: "#/components/schemas/String"
+        first_name:
+          $ref: "#/components/schemas/String"
+        last_name:
+          $ref: "#/components/schemas/String"
+        email:
+          $ref: "#/components/schemas/Email"
+        password:
+          type: string
+          example: password
+
+    UserLogin:
+      properties:
+        email:
+          $ref: "#/components/schemas/Email"
+        password:
+          type: string
+          example: password
+
+    UserDetail:
+      allOf:
+        - $ref: "#/components/schemas/DefaultModelAttributes"
+        - properties:
+            display_name:
+              $ref: "#/components/schemas/String"
+            first_name:
+              $ref: "#/components/schemas/String"
+            last_name:
+              $ref: "#/components/schemas/String"
+            email:
+              $ref: "#/components/schemas/String"
+
+    QuestionDetail:
+      allOf:
+        - $ref: "#/components/schemas/DefaultModelAttributes"
+        - properties:
+            title:
+              $ref: "#/components/schemas/String"
+            description:
+              $ref: "#/components/schemas/String"
+            tags:
+              $ref: "#/components/schemas/String"
+            subscribe:
+              $ref: "#/components/schemas/Boolean"
+            user:
+              $ref: "#/components/schemas/UserDetail"
+
+    QuestionNoUserDetail:
+      allOf:
+        - $ref: "#/components/schemas/DefaultModelAttributes"
+        - properties:
+            title:
+              $ref: "#/components/schemas/String"
+            description:
+              $ref: "#/components/schemas/String"
+            tags:
+              $ref: "#/components/schemas/String"
+            subscribe:
+              $ref: "#/components/schemas/Boolean"
+
+    ReplyDetail:
+      allOf:
+        - $ref: "#/components/schemas/DefaultModelAttributes"
+        - properties:
+            reply:
+              $ref: "#/components/schemas/String"
+            question:
+              $ref: "#/components/schemas/QuestionNoUserDetail"
+            user:
+              $ref: "#/components/schemas/UserDetail"
+
+    PostQuestion:
+      properties:
+        title:
+          $ref: "#/components/schemas/String"
+        description:
+          $ref: "#/components/schemas/String"
+        tags:
+          $ref: "#/components/schemas/String"
+
+    PostReply:
+      properties:
+        reply:
+          $ref: "#/components/schemas/String"
+
+    UserLoginResponse:
+      properties:
+        data:
+          token:
+            type: string
+            example: "eyJ..."
+          user:
+            $ref: "#/components/schemas/UserDetail"
+        message:
+          $ref: "#/components/schemas/String"
+        success:
+          $ref: "#/components/schemas/Boolean"
+
+    UserRegistrationResponse:
+      properties:
+        data:
+          $ref: "#/components/schemas/UserDetail"
+        message:
+          $ref: "#/components/schemas/String"
+        success:
+          $ref: "#/components/schemas/Boolean"
+
+    PostQuestionResponse:
+      properties:
+        data:
+          type: object
+          $ref: "#/components/schemas/QuestionDetail"
+        message:
+          $ref: "#/components/schemas/String"
+        success:
+          $ref: "#/components/schemas/Boolean"
+
+    FetchQuestionResponse:
+      properties:
+        count:
+          $ref: "#/components/schemas/Number"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionDetail"
+        currentPage:
+          $ref: "#/components/schemas/Number"
+        totalPage:
+          $ref: "#/components/schemas/Number"
+        success:
+          $ref: "#/components/schemas/Boolean"
+
+    PostReplyResponse:
+      properties:
+        data:
+          type: object
+          $ref: "#/components/schemas/ReplyDetail"
+        message:
+          $ref: "#/components/schemas/String"
+        success:
+          $ref: "#/components/schemas/Boolean"
+
+    FetchQuestionReplyResponse:
+      properties:
+        count:
+          $ref: "#/components/schemas/Number"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReplyDetail"
+        currentPage:
+          $ref: "#/components/schemas/Number"
+        totalPage:
+          $ref: "#/components/schemas/Number"
+        success:
+          $ref: "#/components/schemas/Boolean"
