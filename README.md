@@ -2,8 +2,8 @@
 
 ## Description
 
-The task implemented a simple clone of Stackoverflow using Node.js (Typescript), Express and Sequelize.
-To limit scope, there are 3 modules that were implemented:
+This repository implemented a simple clone of Stackoverflow using Node.js (Typescript), Express and Sequelize.
+As stated in the assessment test, the following modules were implemented:
 
 1. Authentication
 2. Questions (asking and replying)
@@ -12,11 +12,11 @@ To limit scope, there are 3 modules that were implemented:
 ## Table of Content
 
 - [Assumptions Made](#assumptions-made)
-- [Documentation](#documentation)
 - [System Setup](#system-setup)
 - [Installation](#installation)
-- [Testing](#testing)
+- [Documentation](#documentation)
 - [Deployment](#deployment)
+- [Requirements not covered](#requirements-not-covered)
 - [Feedbacks](#feedbacks)
 
 ## Assumptions Made
@@ -29,17 +29,13 @@ The following assumptions were made during the process of implementing this task
 
 These are the database relationships:
 
-1. A user can post many questions but a question can only belong to a user.
-2. A question can have many replies but a reply can only belong to a question.
-3. A user can comments on many questions.
-4. A reply can have many ratings but a rating can only belong to a reply.
+1. A user can post many questions.
+2. A question can have many replies.
+3. A user can comment on many questions.
+4. A reply can have many ratings.
 5. A user can rate many replies.
 
-The Dbdiagram is available [here](https://dbdiagram.io/d/608b8657b29a09603d12c9c5).
-
-## Documentation
-
-The API documentation is available [here](https://localhost:4000/api/docs/).
+The entity relationship diagram is available [here](https://dbdiagram.io/d/608b8657b29a09603d12c9c5).
 
 ### System Setup
 
@@ -64,8 +60,8 @@ Create a new mysql database
 #### Step 3: Setup environment variables
 
 - Copy `.env.sample` to `.env` i.e `cp .env.sample .env`
-- Change `root` to your database username and `password` to your database password in DATABASE\*URL variable
-- Update other DB\* variables to your local database configuration details
+- Change `root` to your database username and `password` to your database password in DATABASE_URL variable
+- Update other DB\_ variables to your local database configuration details
 - Update other variables as needed
 
 #### Step 4: Install NPM packages
@@ -86,28 +82,29 @@ npm run prestart
 npm run dev
 ```
 
-## Testing
+## Documentation
 
-```bash
-npm run test
-```
+After starting the project in development mode, the API documentation is available [here](https://localhost:4000/api/docs/).
 
 ## Deployment
 
 1. Clone the repo - `git clone <repo-url>`
 2. Navigate into the project directory - `cd <project-directory>`
-3. Ensure you have NodeJS (at least v12) installed
+3. Ensure you have Node.js installed
 4. Install dependencies - `npm install`
 5. Set up environment variables
    - Copy .env.sample to env - `cp .env.sample .env`
-   - Create new mysql databasE.
-   - Change `root` to your database username and `password` to your database password in DATABASE\*URL variable
-   - Update other DB\* variables to your local database configuration details
+   - Create new mysql database.
+   - Change `root` to your database username and `password` to your database password in DATABASE_URL variable
+   - Update other DB\_ variables to your local database configuration details
    - Update other variables as needed
 6. Run database migrations - `npm run pre:start`
-7. Seed initial data - `npx sequelize-cli db:seed:all`
-8. Create a production build - `npm run build`
-9. Start the server - `npm run start`
+7. Create a production build - `npm run build`
+8. Start the server - `npm run start`
+
+## Requirements not covered
+
+1. I could not write the tests for the task.
 
 ## Feedbacks
 
